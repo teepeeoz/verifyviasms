@@ -20,15 +20,19 @@
 	
 	$COUNTER_FILE = "/opt/www.data/sms%s.counter";
 	$COUNTER_MAX = 0;
+	$ACCESSLOG_FILE = "/opt/www.data/sms%s.access";
 	
 	// Set the below to "true" to force the use of TSL
 	$USE_HTTPS = false;
 	
 	$BOOTSTRAP_LOCATION_PREFIX = "";
 	
-	$MSG01 = "<p>Incorrect verification code supplied.  Please retry or reset.</p>";
+	$MSG01 = "<p style='color:#CC0000;'>Incorrect verification code supplied.  Please retry or reset.</p>";
 	$MSG02 = "<p>Click Next for next verification.</p>";
 	$MSG03 = "<p><b>Enter verification code below.</b></p>";
-	$MSG04 = "<p>To send a verification code, enter a mobile number and a password.</b></p>";
+	$MSG04 = "<p>To send a verification code, enter a mobile number and the password.</b></p>";
 	
+	$HDR01 = "Send verify code via SMS";
+	$HDR02 = "Verify Code";
+	$HDR03 = "<div style='color:#44FF44;'>Approved</div>";;
 ?>

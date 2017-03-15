@@ -31,6 +31,17 @@ if ($COUNTER_FILE != "")
 		fclose($fp);
 	}
 }
+
+if ($ACCESSLOG_FILE != "")
+{
+	$dateFormatted = date("Ymd");
+	$ACCESSLOG_FILE = sprintf($ACCESSLOG_FILE, $dateFormatted);
+	if (!file_exists($ACCESSLOG_FILE)) {
+		$fp = fopen($ACCESSLOG_FILE, "w");
+		fwrite($fp,"\n");
+		fclose($fp);
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -97,6 +108,42 @@ if ($COUNTER_FILE != "")
     <div class="container">
 		
 		 <?php
+		 
+	// Get Remote IP for recording		 
+	function get_ip() {
+		//Just get the headers if we can or else use the SERVER global
+		if ( function_exists( 'apache_request_headers' ) ) {
+			$headers = apache_request_headers();
+		} else {
+			$headers = $_SERVER;
+		}
+		//Get the forwarded IP if it exists
+		if ( array_key_exists( 'X-Forwarded-For', $headers ) && filter_var( $headers['X-Forwarded-For'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+			$the_ip = $headers['X-Forwarded-For'];
+		} elseif ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $headers ) && filter_var( $headers['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 )
+		) {
+			$the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+		} else {
+			
+			$the_ip = filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 );
+		}
+		return $the_ip;
+	}
+		 
+		 
+		// Log user details
+		$fp = fopen($ACCESSLOG_FILE, 'a');
+		flock($fp, LOCK_EX);
+		$dateFormatted = date("c");
+		fwrite($fp, $dateFormatted);
+		fwrite($fp, "\t");
+		fwrite($fp, get_ip());
+		fwrite($fp, "\t");
+		fwrite($fp, $_SERVER['HTTP_USER_AGENT']);
+		fwrite($fp, "\n");
+		flock($fp, LOCK_UN);
+		fclose($fp);
+		 
 		// Check if we are setup for SMS
 		$fail = false;
 		if (getenv("TWILIO_SID") == "")
@@ -134,7 +181,7 @@ if ($COUNTER_FILE != "")
 		{
 		 ?>
 
-    	<form class="form-signin" method="post" name="authForm" >
+    	<form class="form-signin" method="post" name="authForm"  onsubmit="return ValidationEvent()">
         	<h3 class="form-signin-heading">
 			<?php
 			
@@ -195,7 +242,7 @@ if ($COUNTER_FILE != "")
 				}				
 
 				if ($action_send && !$fail) {
-					echo "Verify Code</h3>"; 
+					echo $HDR02 . "</h3>"; 
                 	echo "<p>Approved. Sending SMS code...</p>";
 
 					$vercode = sprintf("%05d", mt_rand($VERCODE_MIN, $VERCODE_MAX));
@@ -254,7 +301,7 @@ if ($COUNTER_FILE != "")
 				{
 					if ($fail)
 					{
-						echo "Verify Code</h3>"; 
+						echo $HDR02 . "</h3>"; 
 						echo $MSG01;
 					?>					
 						<input type="hidden" name="mobilenumber" value="<?php echo $mobile; ?>">
@@ -264,14 +311,16 @@ if ($COUNTER_FILE != "")
 					<?php 
 					} 
 					else 
-						echo "Approved</h3>"; 
+					{
+						echo $HDR03 . "</h3>"; 
 						echo $MSG02;
 				?>
-					<input class="btn btn-large btn-primary" type="submit" name="btnNext" value="Next"/>
+						<input class="btn btn-large btn-primary" type="submit" name="btnNext" value="Next"/>
 					<?php 
+					}
 				} else 
 				{
-					echo "Send verify code via SMS</h3>";
+					echo $HDR01 . "</h3>";
 					if ($action_send && $fail) {
 						echo "<p style='color:#CC0000;'><b>" . $error_msg . "</b></p>";
 					} elseif ($action_reset)
@@ -280,15 +329,26 @@ if ($COUNTER_FILE != "")
 					} 
 					echo $MSG04;
 				?>
-					<input type="tel" autocomplete=off class="input-block-level" placeholder="Enter Mobile Number" name="mobilenumber" value="<?php echo $mobile; ?>" maxlength="14">
+					<input type="tel" autocomplete=off class="input-block-level" placeholder="Enter Mobile Number as +614..." name="mobilenumber" value="<?php echo $mobile; ?>" maxlength="14">
+					<p style="color:#CC0000;" id="errorPhone"></p>
 					<input type="password" autocomplete=off class="input-block-level" placeholder="Enter Passphrase" name="password">
-					<input class="btn btn-large btn-primary" type="submit" name="btnSend" value="Send SMS"/>
+					<input class="btn btn-large btn-primary" type="submit" name="btnSend" value="Send SMS"  />
 				<?php 
 				}
  			?>
 			<input class="btn btn-large" type="submit" name="btnReset" value="Reset"/>
 		</form>
-		<p id="feedbackMessage" name="feedbackMessage"></p>
+		<hr />
+		<h4>Notes</h4>
+		<ol>
+		<li>Twilio is used as the SMS service.  To use this application you need to get your own account</li>
+		<li>Just because the person at the other end can supply the correct verificaton code does not imply that the person is the legitimate mobile number owner.  Mobile numbers can be ported or SMS are visible via authorised desktop applications.</li>
+		<li>The mobile number is configured for Australian mobile numbers only.  Change the regex in the Javascript for your country and mobile mumber format</li>
+		<li>The default setup of this web page asks for a passphrase to ensure only authorised users sends messages as there are costs associated with SMS sending</li>
+		<li>If you have alternate authentication methods and are behind a firewall you may consider removign the passphrase for easy of use</li>
+		<li>If the daily SMS send limit is reached on this demo, then the appication switches to simulation mode</li>
+		<li>If using this demo, please use only your own number for testing. Phone numbers are logged as is your browser fingerprint</li>
+		</ol>
 		<?php 
 		// End of setup is done
 		}
@@ -297,8 +357,10 @@ if ($COUNTER_FILE != "")
     <script src="<?php echo $BOOTSTRAP_LOCATION_PREFIX; ?>bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		
-		function validate()
+		function ValidationEvent()
 		{
+			document.getElementById("errorPhone").innerHTML = "";
+			
 			if (!phonenumber(document.authForm.mobilenumber))
 				return false;
 				
@@ -314,8 +376,7 @@ if ($COUNTER_FILE != "")
 			}  
 			else  
 			{  
-			    alert("Please Enter your Mobile Number");
-				document.feedbackMessage.value = "Invalid mobile number";
+				document.getElementById("errorPhone").innerHTML = "Invalid mobile number";
 				return false;  
 			}  
 		}  
