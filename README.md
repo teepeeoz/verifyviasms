@@ -10,7 +10,7 @@ This application does two things:
 
 ## User story
 
-As a customer service representative (CSR) in a contact center, I wish to verify the incomiong caller quickly using their mobile phone.
+As a customer service representative (CSR) in a contact center, I wish to verify the incoming caller quickly using their mobile phone.
 
 A customer has supplied their details to the organisation including their mobile phone number and these details are commonly used to verify the customer on incoming calls. The verification process takes valuable time that could be used instead to address the customers needs.  The verification process can have its own issues in that some details held on the system may not match the customers current detail such as their work direct telephone number or the details are on the drivers license - and the wallet has been lost and is now in someone elses possession.  
  
@@ -18,14 +18,14 @@ The SMS verification process is used by many companies as part of their 2 factor
 
 This verification application process could work as follows:-
 - Customer calls the contact centre
-- CSR uses the customers name and Date of Birth (DOB) to locate their customer record.  The DOB is the first (weak) secret.
+- CSR uses the customers name and Date of Birth (DOB) to locate the customer record.  The DOB is the first (weak) secret.
 - The customer record also holds the mobile phone number
 - The CSR copies and pastes the mobile phone number to the application and clicks send SMS
 - The customer reads out the verificaton code on the SMS to the CSR
-- The CSR enters the verification code into the application
+- The CSR enters the verification code into the application second secret
 - If the code matches, then the 2 factor authentication is successful and the CSR can consider the caller to be identified
 
-*Note*: For calls such as changing sensitive data, additional verification steps should be considered later in the call.  The reasoning behind this is that a mobile phone and wallet may be lost at the same, such as when the mobile phone case contains space for cards and drivers license.
+*Note*: For calls that involve changing sensitive data, additional verification steps should be considered later in the call.  The reasoning behind this is that a mobile phone and wallet may be lost at the same, such as when the mobile phone case contains space for cards and drivers license.
 
 ## Configuraton
 
@@ -33,7 +33,9 @@ The majority of the configuration settings are in the "settings.php" file.
 
 The exception to the configuration are the TWILIO SID and token values.  These are set using environment variables named "TWILIO_SID" and "TWILIO_TOKEN".  The reason for this is to enable deployment from git without including credentials. 
 
-If you wish to enable only under HTTPS, then a valid SSL certificate is required.  For a no cost option, consider using https://letsencrypt.org/.  For SSL only operation change the $USE_HTTPS value to true in settings.
+If you wish to enable he application only under HTTPS, then a valid SSL certificate is required.  For a no cost option, consider using https://letsencrypt.org/.  For SSL only operation change the $USE_HTTPS value to true in settings.
+
+The settings file contains some of the common messages, including error messages, so change theses as you deem appropriate.
 
 ## TWILIO
 
