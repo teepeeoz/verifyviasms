@@ -19,7 +19,7 @@
 	$SMS_MESSAGE = "Your verification code is ";
 	
 	$COUNTER_FILE = "/opt/www.data/sms%s.counter";
-	$COUNTER_MAX = 0;
+	$COUNTER_MAX = 5;
 	$ACCESSLOG_FILE = "/opt/www.data/sms%s.access";
 	
 	// Set the below to "true" to force the use of TSL

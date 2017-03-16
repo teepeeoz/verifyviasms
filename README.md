@@ -10,7 +10,22 @@ This application does two things:
 
 ## User story
 
+As a customer service representative (CSR) in a contact center, I wish to verify the incomiong caller quickly using their mobile phone.
+
+A customer has supplied their details to the organisation including their mobile phone number and these details are commonly used to verify the customer on incoming calls. The verification process takes valuable time that could be used instead to address the customers needs.  The verification process can have its own issues in that some details held on the system may not match the customers current detail such as their work direct telephone number or the details are on the drivers license - and the wallet has been lost and is now in someone elses possession.  
  
+The SMS verification process is used by many companies as part of their 2 factor authentication process for application access and this application manually extends the use case to the contact center.
+
+This verification application process could work as follows:-
+- Customer calls the contact centre
+- CSR uses the customers name and Date of Birth (DOB) to locate their customer record.  The DOB is the first (weak) secret.
+- The customer record also holds the mobile phone number
+- The CSR copies and pastes the mobile phone number to the application and clicks send SMS
+- The customer reads out the verificaton code on the SMS to the CSR
+- The CSR enters the verification code into the application
+- If the code matches, then the 2 factor authentication is successful and the CSR can consider the caller to be identified
+
+*Note*: For calls such as changing sensitive data, additional verification steps should be considered later in the call.  The reasoning behind this is that a mobile phone and wallet may be lost at the same, such as when the mobile phone case contains space for cards and drivers license.
 
 ## Configuraton
 
@@ -22,9 +37,9 @@ If you wish to enable only under HTTPS, then a valid SSL certificate is required
 
 ## TWILIO
 
-Twilio is a servcie provider for communication APIs.  In this case TWILLIO is used for sending a SMS verification code to the recipients mobile phone number.
+Twilio is a servcie provider for communication APIs.  In this case Twilio is used for sending a SMS verification code to the recipients mobile phone number.
 
-If you wish to use this application you will need to donwload the Twilio SDK for PHP ( https://www.twilio.com/docs/libraries/php ) and get your own Twilio account.  Once you have a Twilio account change the variable $TWILIO_NUMBER value to your phone number and set the environment variables named "TWILIO_SID" and "TWILIO_TOKEN".  
+If you wish to use this application you will need to donwload the Twilio SDK for PHP ( https://www.twilio.com/docs/libraries/php ) and get your own Twilio account.  Once you have a Twilio account change the setting variable $TWILIO_NUMBER value to YOUR TWILIO phone number and set the environment variables named "TWILIO_SID" and "TWILIO_TOKEN".  
 
 ## Usage Notes 
 
@@ -32,7 +47,7 @@ This sample application is:
 
 1. Based on Twilio as the SMS service.  To use this application you need to get your own account
 2. Just because the person at the other end can supply the correct verificaton code does not imply that the person is the legitimate mobile number owner.  Mobile numbers can be ported or SMS are visible via authorised desktop applications.
-3. The mobile number is configured for Australian mobile numbers only.  Change the regex in the Javascript for your country and mobile number format
+3. The mobile number is configured for validating againts Australian mobile numbers only.  Change the regex in the Javascript for your country and mobile number format to validate or alternatively remove validation
 4. The default setup of this web page asks for a passphrase to ensure only authorised users sends messages as there are costs associated with SMS sending
 5. If you have alternate authentication methods and are behind a firewall, you may consider removign the passphrase for easy of use
 6. If the daily SMS send limit is reached on this demo, then the application switches to simulation mode
