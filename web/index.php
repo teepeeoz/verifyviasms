@@ -188,6 +188,10 @@ if ($ACCESSLOG_FILE != "")
 				$mobile = "";
 				if ( isset($_POST['mobilenumber']) )
 					$mobile = $_POST['mobilenumber'];
+			
+				$passphrase = "";
+				if ( isset($_POST['password']) )
+					$passphrase = $_POST['password'];
 					
 				$error_msg = "";
 				$action_send = false;
@@ -293,6 +297,7 @@ if ($ACCESSLOG_FILE != "")
 				?>
 					<input type="hidden" name="mobilenumber" value="<?php echo $mobile; ?>">
 					<input type="hidden" name="verifymastercode" value="<?php echo hash("sha256", $vercode); ?>">
+					<input type="hidden" name="password" value="<?php echo $passphrase; ?>">
 					<input type="password" autocomplete=off class="input-block-level" placeholder="Enter code" name="verifycode" maxlength="10">
 	                <input class="btn btn-large btn-primary" type="submit" name="btnVerify" value="Verify Code"/>
 				<?php 
@@ -306,6 +311,7 @@ if ($ACCESSLOG_FILE != "")
 					?>					
 						<input type="hidden" name="mobilenumber" value="<?php echo $mobile; ?>">
 						<input type="hidden" name="verifymastercode" value="<?php echo $_POST['verifymastercode']; ?>">
+						<input type="hidden" name="password" value="<?php echo $passphrase; ?>">
 						<input type="password" autocomplete=off class="input-block-level" placeholder="Enter code" name="verifycode" maxlength="10">
 						<input class="btn btn-large btn-primary" type="submit" name="btnVerify" value="Verify Code"/>
 					<?php 
@@ -315,6 +321,7 @@ if ($ACCESSLOG_FILE != "")
 						echo $HDR03 . "</h3>"; 
 						echo $MSG02;
 				?>
+						<input type="hidden" name="password" value="<?php echo $passphrase; ?>">
 						<input class="btn btn-large btn-primary" type="submit" name="btnNext" value="Next"/>
 					<?php 
 					}
@@ -331,23 +338,20 @@ if ($ACCESSLOG_FILE != "")
 				?>
 					<input type="tel" autocomplete=off class="input-block-level" placeholder="Enter Mobile Number as +614..." name="mobilenumber" value="<?php echo $mobile; ?>" maxlength="14">
 					<p style="color:#CC0000;" id="errorPhone"></p>
-					<input type="password" autocomplete=off class="input-block-level" placeholder="Enter Passphrase" name="password">
+					<input type="password" autocomplete=off class="input-block-level" placeholder="Enter Passphrase" name="password" value="<?php echo $passphrase; ?>">
 					<input class="btn btn-large btn-primary" type="submit" name="btnSend" value="Send SMS"  />
 				<?php 
 				}
  			?>
-			<input class="btn btn-large" type="submit" name="btnReset" value="Reset"/>
+			<input class="btn btn-large" type="submit" name="btnReset" value="Reset" onClick="return resetForm()"/>
 		</form>
 		<hr />
 		<h4>Notes</h4>
 		<ol>
-		<li>Twilio is used as the SMS service.  To use this application you need to get your own account</li>
-		<li>Just because the person at the other end can supply the correct verificaton code does not imply that the person is the legitimate mobile number owner.  Mobile numbers can be ported or SMS are visible via authorised desktop applications.</li>
-		<li>The mobile number is configured for Australian mobile numbers only.  Change the regex in the Javascript for your country and mobile mumber format</li>
-		<li>The default setup of this web page asks for a passphrase to ensure only authorised users sends messages as there are costs associated with SMS sending</li>
-		<li>If you have alternate authentication methods and are behind a firewall you may consider removign the passphrase for easy of use</li>
-		<li>If the daily SMS send limit is reached on this demo, then the appication switches to simulation mode</li>
-		<li>If using this demo, please use only your own number for testing. Phone numbers are logged as is your browser fingerprint</li>
+		<li>See <a href="https://github.com/teepeeoz/verifyviasms">https://github.com/teepeeoz/verifyviasms</a> for more details</li>
+		<li>This application is configured for demonstration purposes</li>
+		<li>Change the configuration to enable for your production environment</li>
+		<li>If using this demo, please use only your own number for testing. Phone numbers are logged as is your browser fingerprint and IP address</li>
 		</ol>
 		<?php 
 		// End of setup is done
@@ -357,9 +361,22 @@ if ($ACCESSLOG_FILE != "")
     <script src="<?php echo $BOOTSTRAP_LOCATION_PREFIX; ?>bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		
+		resetting = false;
+		
+		function resetForm()
+		{
+			resetting = true;
+			return true;
+		}
+		
 		function ValidationEvent()
 		{
 			document.getElementById("errorPhone").innerHTML = "";
+			if (resetting)
+			{
+				resetting = false;
+				return true;
+			}
 			
 			if (!phonenumber(document.authForm.mobilenumber))
 				return false;
@@ -376,7 +393,7 @@ if ($ACCESSLOG_FILE != "")
 			}  
 			else  
 			{  
-				document.getElementById("errorPhone").innerHTML = "Invalid mobile number";
+				document.getElementById("errorPhone").innerHTML = "<b>Invalid mobile number</b>";
 				return false;  
 			}  
 		}  
