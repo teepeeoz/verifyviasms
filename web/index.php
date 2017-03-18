@@ -2,6 +2,7 @@
 
 require_once('settings.php');
 require 'vendor/autoload.php';
+use Twilio\Rest\Client;
  
 if ($USE_HTTPS)
 {
