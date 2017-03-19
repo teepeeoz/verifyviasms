@@ -6,16 +6,18 @@
 
 	// Choose a passphrase and find the sha256 hash of that passphrase.
 	// Use an online function to generate the hash: http://www.xorbin.com/tools/sha256-hash-calculator.
-	$PASSPHRASE_HASH = "c2333a7e3a607935c67c1e6f6810395decc9f66f592b812aaada7db94ba215d6";
-
-	$TWILIO_NUMBER = "+61428747269";
+	// A blank value will skip passphrase validation
+	$PASSPHRASE_HASH = "";
 	
 	// TWILIO SID and Token are fetched as ENVIRONMENT variables not 
 	// as values here as per best practice for DevOps and security
 	// e.g. https://12factor.net/config
 
+	// TWILIO_NUMBER can be specifed here or as ENVIRONMENT variable
+	$TWILIO_NUMBER = "";
+
 	$VERCODE_MIN = 10000; // Lowest number
-	$VERCODE_MAX = 99999; // Larget number
+	$VERCODE_MAX = 99999; // Largest number
 	$SMS_MESSAGE = "Your verification code is ";
 	
 	$COUNTER_FILE = "/opt/www.data/sms%s.counter";
@@ -23,6 +25,7 @@
 	$ACCESSLOG_FILE = "/opt/www.data/sms%s.access";
 	
 	// Set the below to "true" to force the use of TSL
+	// You can get a free SSL Certficate from Let's Encrypt
 	$USE_HTTPS = false;
 	
 	$BOOTSTRAP_LOCATION_PREFIX = "";
@@ -34,5 +37,6 @@
 	
 	$HDR01 = "Send verify code via SMS";
 	$HDR02 = "Verify Code";
-	$HDR03 = "<div style='color:#44FF44;'>Approved</div>";;
+	$HDR03 = "<div style='color:#44FF44;'>Approved</div>";
+	$HDR04 = "SETUP tasks outstanding";
 ?>

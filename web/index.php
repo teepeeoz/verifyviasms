@@ -149,26 +149,40 @@ if ($ACCESSLOG_FILE != "")
 		$fail = false;
 		if (getenv("TWILIO_SID") == "")
 		{
+			if (!$fail)
+			   echo "<h3>" . $HDR04 . "</h3>";
 			echo "<p>TWILIO_SID is not set.</p>";
 			$fail = true;
 		}
 		if (getenv("TWILIO_TOKEN") == "")
 		{
+			if (!$fail)
+			   echo "<h3>" . $HDR04 . "</h3>";
 			echo "<p>TWILIO_TOKEN is not set.</p>";
 			$fail = true;
 		}
+		if (getenv("TWILIO_NUMBER") != "")
+		{
+			$TWILIO_NUMBER = getenv("TWILIO_NUMBER");
+		}
 		if ($TWILIO_NUMBER == "")
 		{
+			if (!$fail)
+			   echo "<h3>" . $HDR04 . "</h3>";
 			echo "<p>TWILIO_NUMBER is not set.</p>";
 			$fail = true;
 		}
 		if ($COUNTER_FILE == "")
 		{
+			if (!$fail)
+			   echo "<h3>" . $HDR04 . "</h3>";
 			echo "<p>COUNTER_FILE is not set.</p>";
 			$fail = true;
 		}
 		if ($SMS_MESSAGE == "")
 		{
+			if (!$fail)
+			   echo "<h3>" . $HDR04 . "</h3>";
 			echo "<p>SMS_MESSAGE is not set.</p>";
 			$fail = true;
 		}
@@ -207,7 +221,7 @@ if ($ACCESSLOG_FILE != "")
 					if (isset($_POST['password']) )
 					{
 						$hash = hash("sha256", $_POST['password']);
-						if ($hash == $PASSPHRASE_HASH)
+						if (($PASSPHRASE_HASh == "") || ($hash == $PASSPHRASE_HASH))
 							$fail = false;
 						else
 							$error_msg = "Invalid Passphrase. Request Denied.";
