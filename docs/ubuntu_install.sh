@@ -2,7 +2,6 @@
 
 echo "Running installation steps for Verify via SMS"
 
-apt-get -y upgrade
 apt-get install apache2  php7.0 libapache2-mod-php7.0 curl  -y
 /etc/init.d/apache2 restart
 
@@ -20,21 +19,19 @@ php -r "unlink('composer-setup.php');"
 cd /var/www/html
 php /opt/composer.phar require twilio/sdk:5.6.0
 
-# This source
+# THE page
 wget https://raw.githubusercontent.com/teepeeoz/verifyviasms/master/web/index.php
-
+# Settings
 wget https://raw.githubusercontent.com/teepeeoz/verifyviasms/master/web/settings.php
-
-# Bootstrap
+# Bootstrap files
 wget https://raw.githubusercontent.com/teepeeoz/verifyviasms/master/docs/bootstrap.zip
 
-# unpack
+# Unpack bootstrap
 unzip /var/www/html/bootstrap.zip
-
-# delete file
+# Delete bootstrap zip file
 rm /var/www/html/bootstrap.zip
 
-# delete default Apache file
+# Delete default Apache file
 rm /var/www/html/index.html 
 
 # Create location to store counter and tracking
