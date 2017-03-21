@@ -221,7 +221,7 @@ if ($ACCESSLOG_FILE != "")
 					if (isset($_POST['password']) )
 					{
 						$hash = hash("sha256", $_POST['password']);
-						if (($PASSPHRASE_HASh == "") || ($hash == $PASSPHRASE_HASH))
+						if (($PASSPHRASE_HASH == "") || ($hash == $PASSPHRASE_HASH))
 							$fail = false;
 						else
 							$error_msg = "Invalid Passphrase. Request Denied.";
