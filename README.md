@@ -8,7 +8,7 @@ This application does two things:
 1. Send a random verification code via SMS to the provided moble telephone number
 2. Verifies the input verification code against the code sent to the mobile
 
-## User story
+## User story #1
 
 As a customer service representative (CSR) in a contact center, I wish to verify the incoming caller quickly using their mobile phone.
 
@@ -26,6 +26,17 @@ This verification application process could work as follows:-
 - If the code matches, then the 2 factor authentication is successful and the CSR can consider the caller to be identified
 
 *Note*: For calls that involve changing sensitive data, additional verification steps should be considered later in the call.  The reasoning behind this is that a mobile phone and wallet may be lost at the same, such as when the mobile phone case contains space for cards and drivers license.
+
+## User story #2
+
+As a customer representative (CSR) in a contact centre, I wish to verify the validity of a prospects mobile number.
+
+While we are familiar with emails from a new service that require you to click on a link on an email to verify your email address, it is less frequent that a contact centre will verify the mobile number you have just supplied.  This can have the drawback that the incorrect mobile number is supplied or captured due to keying errors.
+
+The SMS verification process can be used to verify that a new prospect has the mobile and that the CSR has captured the correct mobile number for the prospect.  The same process could also be used to verify a changed mobile number for an exsiting customer.
+
+*Note*: The mobile number should not be used for verification of the caller if the mobile number is being changed at the same time.  Addotional security questions should be asked if the mobile number is changing.  The same heightened security process should be followed s when the customers address changes. 
+
 
 ## Configuraton
 
