@@ -35,10 +35,10 @@ While we are familiar with emails from a new service that require you to click o
 
 The SMS verification process can be used to verify that a new prospect has the mobile and that the CSR has captured the correct mobile number for the prospect.  The same process could also be used to verify a changed mobile number for an exsiting customer.
 
-*Note*: The mobile number should not be used for verification of the caller if the mobile number is being changed at the same time.  Addotional security questions should be asked if the mobile number is changing.  The same heightened security process should be followed s when the customers address changes. 
+*Note*: The mobile number should not be used for verification of the caller if the mobile number is being changed at the same time.  Additional security questions should be asked if the mobile number is changing.  The same heightened security process should be followed s when the customers address changes. 
 
 
-## Configuraton
+## Configuration
 
 The majority of the configuration settings are in the "settings.php" file.
 
