@@ -2,7 +2,7 @@
 
 echo "Running installation steps for Verify via SMS"
 
-apt-get install zip apache2  php7.0 libapache2-mod-php7.0 curl -y
+apt-get install -y zip apache2  php7.0 libapache2-mod-php7.0 curl
 /etc/init.d/apache2 restart
 
 # PHP Composer setup 

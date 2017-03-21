@@ -2,7 +2,7 @@
 
 echo "Running installation steps for Verify via SMS"
 
-yum install -y httpd24 php70 curl zip
+yum install -y zip httpd24 php70 curl
 service httpd start
 chkconfig httpd on
 
